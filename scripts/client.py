@@ -49,66 +49,60 @@ logging.basicConfig(
 ##########################
 
 
-class ToolConvert:
-    @staticmethod
-    def _json_type_to_python_type(json_type: str) -> type:
-        """Convert JSON schema types to Python types."""
-        type_mapping = {
-            "string": str,
-            "number": float,
-            "integer": int,
-            "boolean": bool,
-            "array": list,
-            "object": dict,
-        }
-        return type_mapping.get(json_type, t.Any)
+def mcp_tool_to_function(tool_def: mcp.types.Tool) -> t.Callable[[t.Any], t.Any]:
+    """
+    Create a dummy function from a tool definition schema, thats what Magentic wants.
 
-    @staticmethod
-    def create_dummy_tool_fn(tool_def: mcp.types.Tool) -> t.Callable[[t.Any], t.Any]:
-        """
-        Create a dummy function from a tool definition schema.
+    :param tool_definition: Dictionary containing the tool definition with name,
+        description, and input_schema
+    """
+    name = tool_def.name
+    docstring = tool_def.description
 
-        :param tool_definition: Dictionary containing the tool definition with name,
-            description, and input_schema
-        """
-        name = tool_def.name
-        docstring = tool_def.description
+    # Parse input schema
+    properties = tool_def.inputSchema["properties"]
+    required = tool_def.inputSchema.get("required", [])
 
-        # Parse input schema
-        properties = tool_def.inputSchema["properties"]
-        required = tool_def.inputSchema.get("required", [])
+    type_mapping = {
+        "string": str,
+        "number": float,
+        "integer": int,
+        "boolean": bool,
+        "array": list,
+        "object": dict,
+    }
 
-        # Create parameters dictionary
-        parameters = {}
-        for param_name, param_info in properties.items():
-            param_type = ToolConvert._json_type_to_python_type(param_info["type"])
-            parameters[param_name] = param_type
+    # Create parameters dictionary
+    parameters = {}
+    for param_name, param_info in properties.items():
+        param_type = type_mapping.get(param_info["type"], t.Any)
+        parameters[param_name] = param_type
 
-        # Create signature parameters
-        sig_parameters = []
-        for param_name, param_type in parameters.items():
-            # Make parameter required or optional based on the required list
-            default = inspect.Parameter.empty if param_name in required else None
-            param = inspect.Parameter(
-                name=param_name,
-                kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
-                annotation=param_type,
-                default=default,
-            )
-            sig_parameters.append(param)
+    # Create signature parameters
+    sig_parameters = []
+    for param_name, param_type in parameters.items():
+        # Make parameter required or optional based on the required list
+        default = inspect.Parameter.empty if param_name in required else None
+        param = inspect.Parameter(
+            name=param_name,
+            kind=inspect.Parameter.POSITIONAL_OR_KEYWORD,
+            annotation=param_type,
+            default=default,
+        )
+        sig_parameters.append(param)
 
-        # Create the signature
-        sig = inspect.Signature(sig_parameters, return_annotation=t.Any)
+    # Create the signature
+    sig = inspect.Signature(sig_parameters, return_annotation=t.Any)
 
-        # Create the dummy function
-        def dummy_func(*args, **kwargs): ...
+    # Create the dummy function
+    def dummy_func(*args, **kwargs): ...
 
-        # Set the function's metadata
-        dummy_func.__name__ = name
-        dummy_func.__doc__ = docstring
-        dummy_func.__signature__ = sig
+    # Set the function's metadata
+    dummy_func.__name__ = name
+    dummy_func.__doc__ = docstring
+    dummy_func.__signature__ = sig
 
-        return dummy_func
+    return dummy_func
 
 
 class StateMCPClient(enum.Enum):
@@ -244,9 +238,7 @@ class ChatScreen(Screen):
         self.chat = mg.Chat(
             model=AnthropicChatModel(model="claude-3-5-haiku-latest"),
             output_types=[mg.AsyncStreamedResponse],
-            functions=[
-                ToolConvert.create_dummy_tool_fn(tool) for tool in available_tools
-            ],
+            functions=[mcp_tool_to_function(tool) for tool in available_tools],
         )
         self.chat = self.chat.add_system_message(
             "You are a helpful assistant. You can use the attached tools if needed to answer the user query."
@@ -830,7 +822,7 @@ class MCPTextualApp(App):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python client.py <mcp_servers_config_path>")
+        print("Usage: uv run client.py <mcp_servers_config_path>")
         sys.exit(1)
 
     app = MCPTextualApp(sys.argv[1])

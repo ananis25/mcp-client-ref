@@ -1075,8 +1075,8 @@ wheels = [
 
 [[package]]
 name = "magentic"
-version = "0.38.0"
-source = { editable = "../magentic" }
+version = "0.38.1"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filetype" },
     { name = "logfire-api" },
@@ -1085,49 +1085,9 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "typing-extensions" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.41.0" },
-    { name = "filetype", specifier = ">=1.2.0" },
-    { name = "litellm", marker = "extra == 'litellm'", specifier = ">=1.41.12" },
-    { name = "logfire-api", specifier = ">=0.1.0" },
-    { name = "openai", specifier = ">=1.56.0" },
-    { name = "pydantic", specifier = ">=2.10.0" },
-    { name = "pydantic-settings", specifier = ">=2.0.0" },
-    { name = "typing-extensions", specifier = ">=4.5.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "anthropic" },
-    { name = "coverage", specifier = ">=7.6.4" },
-    { name = "inline-snapshot", specifier = ">=0.14.0" },
-    { name = "litellm" },
-    { name = "logfire", specifier = ">=0.46.1,<0.50.0" },
-    { name = "mypy" },
-    { name = "pydeps", specifier = ">=2.0.1" },
-    { name = "pytest", specifier = ">=7.0.0" },
-    { name = "pytest-asyncio", specifier = ">=0.18.0" },
-    { name = "pytest-clarity", specifier = ">=0.1.0" },
-    { name = "pytest-cov", specifier = ">=4.0.0" },
-    { name = "pytest-mock", specifier = ">=3.14.0" },
-    { name = "pytest-recording", specifier = ">=0.13.2" },
-    { name = "python-dotenv", specifier = ">=1.0.1" },
-    { name = "ruff", specifier = ">=0.3" },
-    { name = "vcrpy", specifier = ">=6.0.2" },
-]
-docs = [
-    { name = "blacken-docs", specifier = ">=1.16.0" },
-    { name = "mkdocs", specifier = ">=1.5.3" },
-    { name = "mkdocs-glightbox", specifier = ">=0.4.0" },
-    { name = "mkdocs-jupyter", specifier = ">=0.24.6" },
-    { name = "mkdocs-material", specifier = ">=9.5.11" },
-]
-examples = [
-    { name = "ghapi", specifier = ">=1.0.5" },
-    { name = "jupyter" },
-    { name = "pandas", specifier = ">=2.2.1" },
+sdist = { url = "https://files.pythonhosted.org/packages/32/d0/97d398fac41b993fc94c7a4bbe83f5a891afc0d8a4cae20a0eb38dd871f2/magentic-0.38.1.tar.gz", hash = "sha256:017105d6a7758b838018be50964cec64c3885bb93bbac863dda3ef0e3195f327", size = 1750589 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/66/5a/0eaeb50eba30b6ba18ab26b62c004bd3bc28071c9d50d0077c8cbef091bf/magentic-0.38.1-py3-none-any.whl", hash = "sha256:433e80b9b6f1230d2871b364fc38bc7f8d1c9f645afa1469d7c14d5adbb1393e", size = 51351 },
 ]
 
 [[package]]
@@ -1256,7 +1216,7 @@ dev = [
 requires-dist = [
     { name = "anthropic", specifier = ">=0.44.0" },
     { name = "logfire", specifier = ">=3.2.0" },
-    { name = "magentic", editable = "../magentic" },
+    { name = "magentic", specifier = ">=0.38.1" },
     { name = "mcp", extras = ["cli"], git = "https://github.com/modelcontextprotocol/python-sdk/" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "sqlite-utils", specifier = ">=3.38" },

@@ -1,0 +1,18 @@
+{
+    "mcpServers": {
+        "server_simple": {
+            "command": "uv",
+            "args": [
+                "run",
+                "scripts/server_simple.py"
+            ]
+        },
+        "server_fortune": {
+            "command": "uv",
+            "args": [
+                "run",
+                "scripts/server_fortune.py"
+            ]
+        }
+    }
+}

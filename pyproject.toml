@@ -8,7 +8,7 @@ requires-python = ">=3.11"
 dependencies = [
     "anthropic>=0.44.0",
     "logfire>=3.2.0",
-    "magentic>=0.37.0",
+    "magentic>=0.38.1",
     "mcp[cli]>=1.2.0",
     "python-dotenv>=1.0.1",
     "sqlite-utils>=3.38",
@@ -27,5 +27,4 @@ dev = [
 ]
 
 [tool.uv.sources]
-magentic = { path = "../magentic", editable = true }
 mcp = { git = "https://github.com/modelcontextprotocol/python-sdk/" }
