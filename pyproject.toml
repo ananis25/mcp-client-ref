@@ -1,0 +1,31 @@
+[project]
+name = "mcp-client-ref"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "Ishan Anand", email = "anand.ishan@outlook.com" }]
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.44.0",
+    "logfire>=3.2.0",
+    "magentic>=0.37.0",
+    "mcp[cli]>=1.2.0",
+    "python-dotenv>=1.0.1",
+    "sqlite-utils>=3.38",
+    "textual>=1.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "jupyter>=1.1.1",
+    "textual-dev>=1.7.0",
+]
+
+[tool.uv.sources]
+magentic = { path = "../magentic", editable = true }
+mcp = { git = "https://github.com/modelcontextprotocol/python-sdk/" }
